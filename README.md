@@ -49,3 +49,12 @@ Tham khảo:
 
 ### Task 2: Viết parser cho IPv4 
 
+Luồng dữ liệu sẽ đi như sau:
+
+```
+raw_bytes -> parse_ipv4() -> normalized output {src_ip, dst_ip, ...}
+```
+
+Tham khảo:
+- https://www.forum.vnpro.org/forum/ccna%C2%AE/cyber-security/432692-ipv4-header
+
