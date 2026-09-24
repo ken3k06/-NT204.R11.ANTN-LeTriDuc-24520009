@@ -79,16 +79,16 @@ class NormalizedEvent:
     def is_unknown_protocol(self) -> bool:
         return self.app_protocol == AppProtocol.UNKNOWN 
 
-    def __str__(self) -> str: 
-        return (
-            f"#{self.packet_id:<4}"
-            f"{self.src_ip or '-':15} -> {self.dst_ip or '-':15}"
-            f"{self.transport:<4}"
-            f"{self.app_protocol:<6}"
-            f"payload={self.payload_len}B"
-            + (f" ERR={self.error}" if self.error else "") 
-        )
-
+    def __str__(self) -> str:
+        parts = [
+            f"#{self.packet_id:<4}",
+            f"{self.src_ip or '-':>15} -> {self.dst_ip or '-':<15}",
+            f"{self.transport:<8}",
+            f"{self.app_protocol:<8}",
+            f"payload={self.payload_len}B",
+        ]
+        line = "  ".join(parts)
+        return line + (f"   ERR={self.error}" if self.error else "")
 def make_malformed_event(
     packet_id : int,
     timestamp: float, 

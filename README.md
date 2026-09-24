@@ -43,3 +43,9 @@ ls(IP)
 ls(UDP)
 ls(TCP)
 ```
+
+Tham khảo: 
+- https://www.forum.vnpro.org/forum/ccna%C2%AE/ccna-200-301/439058-tcp-header-%E2%80%93-ph%C3%A2n-t%C3%ADch-chi-ti%E1%BA%BFt-c%E1%BA%A5u-tr%C3%BAc-g%C3%B3i-tin-c%E1%BB%A7a-transmission-control-protocol
+
+### Task 2: Viết parser cho IPv4 
+
