@@ -75,6 +75,6 @@ def _parse_udp(data: bytes) -> dict:
         "transport": "UDP", 
         "src_port": src_port, 
         "dst_port": dst_port, 
-        "udp_length": length, 
+        "udp_len": length, 
         "payload": data[UDP_HEADER:],   
     }

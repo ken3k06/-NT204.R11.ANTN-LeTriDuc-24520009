@@ -37,6 +37,14 @@ def parse_ipv4(raw:bytes) -> Optional[dict]:
     (
         _ver_ihl, _tos, total_len, _id, _flags_frag, ttl, proto, _checksum, src_ip, dst_ip 
     ) = struct.unpack("!BBHHHBBH4s4s", raw[:20])
+    if total_len < header_len:
+        raise MalformedPacketError(
+            f"invalid IPv4 length ({total_len} < {header_len})"
+        )
+    if len(raw) < total_len:
+        raise MalformedPacketError(
+            f"truncated IPv4 packet ({len(raw)} < {total_len})"
+        )
     return {
         "version" : version, 
         "header_len": header_len, 
@@ -46,5 +54,5 @@ def parse_ipv4(raw:bytes) -> Optional[dict]:
         "ip_proto": proto,
         "src_ip": ".".join(str(b) for b in src_ip), 
         "dst_ip": ".".join(str(b) for b in dst_ip), 
-        "payload": raw[header_len:], 
+        "payload": raw[header_len:total_len], 
     }

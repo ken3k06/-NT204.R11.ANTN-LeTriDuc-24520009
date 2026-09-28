@@ -60,4 +60,30 @@ Tham khảo:
 
 Sau khi parse xong ta cần chuẩn hóa output. Chi tiết tại file `pipeline.py`
 
+### Task 3: Capture và application parser
 
+Chương trình hỗ trợ đọc packet từ live interface hoặc file pcap, sau đó đưa vào cùng pipeline:
+
+```bash
+python3 main.py --pcap test.pcap --output events.jsonl
+python3 main.py --interface eth0 --count 10 --output events.jsonl
+```
+
+Output được ghi theo JSON Lines, mỗi dòng là một `NormalizedEvent`.
+
+Application parser hiện có:
+- HTTP request/response: method, path, status code, headers, body length
+- DNS query/response: domain, query type, answer
+- SMTP command/response: command hoặc status code
+
+Test:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/pytest -q
+```
+
+### Ghi chú AI
+
+Có sử dụng AI để hỗ trợ hoàn thiện phần capture, application parser, test case và README.

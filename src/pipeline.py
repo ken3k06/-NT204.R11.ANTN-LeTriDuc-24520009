@@ -7,6 +7,7 @@ from src.models.event import (
     make_malformed_event,
     make_unknown_event,
 )
+from src.parsers.application import parse_application
 from src.parsers.network import parse_ipv4
 from src.parsers.transport import parse_transport
 
@@ -64,5 +65,26 @@ def process(raw: bytes, timestamp: float, packet_id: int) -> NormalizedEvent:
         event.tcp_window = tp["tcp_window"]
     else:
         event.udp_len = tp["udp_len"]
+
+    try:
+        app = parse_application(
+            tp["payload"],
+            event.transport,
+            event.src_port,
+            event.dst_port,
+        )
+    except MalformedPacketError as e:
+        event.error = str(e)
+        return event
+    except ParseError as e:
+        event.error = str(e)
+        return event
+    except Exception as e:
+        event.error = f"unexpected: {e}"
+        return event
+
+    if app is not None:
+        event.app_protocol = app["app_protocol"]
+        event.app_data = app["app_data"]
 
     return event
