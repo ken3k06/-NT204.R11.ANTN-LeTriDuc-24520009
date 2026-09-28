@@ -3,7 +3,7 @@ import struct
 from typing import Optional 
 
 
-from src.errors import * 
+from src.errors import MalformedPacketError
 
 
 
