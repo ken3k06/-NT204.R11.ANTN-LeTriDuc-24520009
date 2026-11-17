@@ -113,3 +113,56 @@ def make_unknown_event(
         error=ErrorHandling.UNSUPPORTED,
         raw_hex=raw.hex() if raw else None,
     )
+
+
+# === Detection Event (Bài tập 3) ===
+
+@dataclass
+class DetectionEvent:
+    """Kết quả thống nhất khi một rule khớp với normalized event.
+
+    Alert/Logging/Response ở bài sau chỉ cần đọc object này,
+    không cần biết rule được so khớp ở đâu.
+    """
+    timestamp: float
+    sid: int
+    rev: int
+    msg: str
+
+    # 5-tuple + protocol
+    src_ip: Optional[str] = None
+    dst_ip: Optional[str] = None
+    src_port: Optional[int] = None
+    dst_port: Optional[int] = None
+    protocol: str = Transport.UNKNOWN
+
+    application_protocol: str = AppProtocol.UNKNOWN
+    flow_id: Optional[str] = None
+    packet_id: Optional[int] = None
+
+    # Từ rule
+    action: str = "alert"
+    priority: Optional[int] = None
+    classtype: Optional[str] = None
+
+    # Thông tin match (content/field đã khớp, buffer, vị trí, ...)
+    match: dict[str, Any] = field(default_factory=dict)
+    rule: Optional[str] = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+    def to_json(self) -> str:
+        return json.dumps(self.to_dict(), ensure_ascii=True)
+
+    def __str__(self) -> str:
+        parts = [
+            f"[{self.action.upper()}]",
+            f"sid={self.sid}:{self.rev}",
+            f"{self.msg}",
+            f"{self.src_ip or '-'}:{self.src_port or '-'} -> "
+            f"{self.dst_ip or '-'}:{self.dst_port or '-'}",
+            f"{self.protocol}/{self.application_protocol}",
+            f"flow={self.flow_id or '-'}",
+        ]
+        return "  ".join(parts)
